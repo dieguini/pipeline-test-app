@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;600;700&display=swap');
+
+:root {
+    --main-color: #7b70fa;
+    --main-color-neutral: #9d70fa; 
+    --main-color-light: #758BFD;
+    --main-color-dark: #27187E;
+
+    --secondary-color: #FFC701;
+    --secondary-color-light: #FFE201;
+    --secondary-color-dark: #FF8600;
+
+    --neutral-light: #FFF;
+    --neutral-dark: #333333;
+
+    --color-highlight: #e8e9fe;
+
+    --gray-100: #F1F2F6;
+    --gray-200: #E4E4E4;
+    --gray-400: #C6C6C6;
+    --gray-600: #717171;
+}

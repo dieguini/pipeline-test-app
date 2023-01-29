@@ -1,0 +1,70 @@
+.uploadButton {
+  background: linear-gradient(60deg,var(--secondary-color) , var(--secondary-color-light));
+  font-weight: bold;
+}
+
+.uploadWindow {
+    position: absolute;
+    margin-top: 1rem;
+    padding: 2rem 2rem 2rem 2rem;
+    z-index: 9999;
+    background-color: rgba(219, 219, 219, 0.911);
+    border-radius: 0.5rem;
+    align-items: center;
+}
+
+
+.uploadWindow > ul {
+    text-align: justify;
+}
+
+.closeButton {
+    top: 0;
+    right: 0;
+    border-radius: 50%;
+    padding: 0.5em;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #2B2E4A;
+    color: #2B2E4A;
+    position: absolute;
+  }
+
+.closeButton:hover {
+    border: 2px solid #2B2E4A;
+    background-color: rgb(250, 72, 72);
+    color: #ffffff;
+  }
+  
+.closeButton::before {
+  content: " ";
+  position: absolute;
+  display: block;
+  background-color: #2B2E4A;
+  width: 2px;
+  left: 7px;
+  top: 2px;
+  bottom: 3px;
+  transform: rotate(45deg);
+}
+.closeButton::after {
+  content: " ";
+  position: absolute;
+  display: block;
+  background-color: #2B2E4A;
+  height: 2px;
+  top:7px;
+  left: 3px;
+  right: 3px;
+  transform: rotate(45deg);
+}
+
+.hidden {
+  display:none;
+}
+
+.centered-h {
+  display:block;
+  margin-left: auto;
+  margin-right: auto;
+}

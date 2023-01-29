@@ -1,0 +1,19 @@
+.NavBarFull{
+    background-color: #2B2E4A !important;
+}
+
+.Navbar-Brand{
+    color: white !important;
+}
+
+.button-navbar{
+    background-color: transparent;
+    color: white;
+    border: 1px;
+    box-shadow: none;
+    margin-right: 20px;
+}
+
+.rightnavbar{
+    justify-content: right;
+}
