@@ -1,28 +1,62 @@
-name: GitHub Secret example
+name: Amplify AWS pipeline
 
-on:
-  push:
+on: [push]
+
+env:
+  AWS_REGION: us-east-1
 
 jobs:
-  secrets-in-github-actions:
+  deploy:
     runs-on: ubuntu-latest
 
-    # The Secrect Actions GitHub example has three steps
     steps:
-      # Show how to print unmasked GitHub secrets to the console
-      - name: Step 1 - Echo out a GitHub Actions Secret to the logs
-        run: |
-          echo "The GitHub Action Secret will be masked:  "
-          echo ${{ secrets.SECRET_TOKEN }}
-          echo "Trick to echo GitHub Actions Secret:  "
-          echo ${{secrets.SECRET_TOKEN}} | sed 's/./& /g' 
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      # Use a GitHub Actions secret variable in a bash shell
-      - name: Step 2 - GitHub Action if statement (true)
-        env: 
-          WHO_TO_TRUST: ${{ secrets.SECRET_TOKEN }}
-        if:  env.WHO_TO_TRUST == 'TrustNo1'
-        run: echo "I know what the secret token is!"
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Install Amplify CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install nodejs npm -y
+        sudo npm install -g @aws-amplify/cli
+
+    - name: Configure Amplify CLI
+      run: amplify configure
+
+# name: GitHub Secret example
+
+# on:
+#   push:
+
+# jobs:
+#   secrets-in-github-actions:
+#     runs-on: ubuntu-latest
+
+#     # The Secrect Actions GitHub example has three steps
+#     steps:
+#       # Show how to print unmasked GitHub secrets to the console
+#       - name: Step 1 - Echo out a GitHub Actions Secret to the logs
+#         run: |
+#           echo "The GitHub Action Secret will be masked:  "
+#           echo ${{ secrets.SECRET_TOKEN }}
+#           echo "Trick to echo GitHub Actions Secret:  "
+#           echo ${{secrets.SECRET_TOKEN}} | sed 's/./& /g' 
+
+#       # Use a GitHub Actions secret variable in a bash shell
+#       - name: Step 2 - GitHub Action if statement (true)
+#         env: 
+#           WHO_TO_TRUST: ${{ secrets.SECRET_TOKEN }}
+#         if:  env.WHO_TO_TRUST == 'TrustNo1'
+#         run: echo "I know what the secret token is!"
+
+
+
 # name: Frontend CI
 
 # on:
