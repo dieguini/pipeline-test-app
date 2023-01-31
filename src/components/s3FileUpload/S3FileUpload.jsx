@@ -24,7 +24,7 @@ const S3FileUpload = () => {
                 return false;
             }
             const fileName =
-                "data/" +
+                "input/devops/" +
                 fileContent.name.substr(0, fileContent.name.indexOf(ext) - 1) +
                 "." +
                 ext;

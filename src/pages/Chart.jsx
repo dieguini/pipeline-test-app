@@ -1,57 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useState} from "react";
 
 import ChatbotContext from "../contexts/ChatbotContext";
 import Grid from "../components/charts/components/Grid";
+import{ SimpleButton,Dropdown  }from "../components/buttons/Buttons";
+
+
 
 export const Chart = () => {
 
   const { chartData } = useContext(ChatbotContext);
+  const [selectedOption, setSelectedOption] = useState('Frequent Requests');
+  const FrequentList = ['DevOps Bootcamp Applicants', 'DevOps Bootcamp Grades', 'Dev Bootcamp Subjects','QA Bootcamp Grades']; //test data should be replaced on integration
+  const HistoryList =  ['DevOps Bootcamp Applicants', 'DevOps Bootcamp Grades', 'Dev Bootcamp Subjects']; //test data should be replaced on integration
 
-  // const data = {
-  //   labels: generalData.map((data) => data),
-  // };
-
-  // const [category, setCategory] = useState(null);
-  // const [isTable,setIsTable] = useState(null);
-  // const [dataTable,setDataTable] = useState(null);
-
-  // const changeCategory = (e) => {
-  //   let grid_obj = {
-  //     name: responseFirstLabel.name,
-  //     headers: responseFirstLabel.columns,
-  //     rows: responseFirstLabel.rows ,
-  //     labels: responseFirstLabel.rows.map((data) => data[responseFirstLabel.columns[1]]),
-  //     rowsToShow: responseFirstLabel.rows.map((data) => data[responseFirstLabel.columns[2]])
-  //   }
- 
-  //   switch (e.target.innerText) {
-  //     case "R1 GRADES":
-  //       setIsTable(true);
-  //       setCategory(
-  //         <Grid
-  //           name={grid_obj.name}
-  //           headers={grid_obj.headers} 
-  //           rows={grid_obj.rows}
-  //         />
-  //       );
-  //       setDataTable(grid_obj);
-  //       break;
-  //     case "R2 APPLICATION":
-  //       setIsTable(false);
-  //       setCategory(
-  //         <BarChart
-  //         label={grid_obj.name}
-  //         labels={grid_obj.labels}
-  //         data={grid_obj.rowsToShow}
-  //         borderColor="black"
-  //         borderWidth={2}
-  //       /> );
-  //       setDataTable(grid_obj);
-  //       break;
-  //     default:
-  //       break;      
-  //   }
-  // };
+  const firstColumnStyle = {
+    width: '20%',
+    borderRight: '2px solid #8b8b8b'
+  }
+  const secondColumnStyle = {
+    width: '80%',
+  }
 
   return (
     <div 
@@ -62,44 +30,29 @@ export const Chart = () => {
         borderRadius: '5px',
         marginTop: 50
         }}>
-        {/* TODO: implement reports navigation menu */}
-        {/* <div className="row">
-          <div className="col-12">
-            <div className="card p-3 pb-2">
-              <div className="row justify-content-center">
-                {data.labels.map((label, index) =>
-                  index < 3 && (
-                    <div className="col-4 col-md-4 col-lg-4 col-xl-2">
-                      <MDBBtn
-                        id="send-button"
-                        style={{ backgroundColor: "var(--main-color-light)" }}
-                        onClick={changeCategory}
-                        key={index}
-                      >
-                        {label}
-                      </MDBBtn>
-                    </div>
-                  )
-                )}
-                {data.labels.length > 3 && (
-                  <div className="col-4 col-md-4 col-lg-4 col-xl-2">
-                    <MDBDropdown>
-                      <MDBDropdownToggle caret style={{ backgroundColor: "#27187E" }}>
-                        More Reports
-                      </MDBDropdownToggle>
-                      <MDBDropdownMenu basic>
-                        {data.labels.slice(3).map((label) => (
-                          <MDBDropdownItem link key={label}>{label}</MDBDropdownItem>
-                        ))}
-                      </MDBDropdownMenu>
-                    </MDBDropdown>
-                  </div>
-                ) }
-              </div>
-            </div>
+        <div className="row">
+          <div className="col-1" style={firstColumnStyle}>
+             <Dropdown selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
           </div>
-        </div> */}
-
+          <div className="col-2" style={secondColumnStyle}>
+              {selectedOption === "Frequent Requests" ? (
+              <div className="flex-wrap" style={{display: "flex"}}>
+                {FrequentList.map((item, index) => (
+                  <SimpleButton variant='request' key={index} style={{margin: "0 3px",justifyContent: "center"}}> 
+                    {item}
+                  </SimpleButton>
+                ))}
+              </div>
+              ) : 
+              <div className="flex-wrap" style={{display: "flex"}}>
+                {HistoryList.map((item, index) => (
+                  <SimpleButton variant='request' key={index}> 
+                    {item}
+                  </SimpleButton>
+                ))}
+              </div>}
+          </div>
+        </div>
         <div className="justify-content-center text-center">
           <div className="py-3">
             {chartData ? (
