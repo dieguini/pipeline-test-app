@@ -19,8 +19,10 @@ jobs:
         node-version: [12.x]
         # node-version: [10.x, 12.x, 14.x, 15.x]
 
+    name: IMPORTANT! ===================== [NODE ${{ matrix.node }} - VERSION] =====================
     steps:
 
+    # INSTALLACION
     - name: ===================== [Configure AWS credentials] =====================
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -32,10 +34,18 @@ jobs:
         #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         #aws-region: ${{ env.AWS_REGION }}
 
+    - name: ===================== [Install Amplify CLI] =====================
+      run: |
+        sudo apt-get update
+        sudo apt-get install nodejs npm -y
+        sudo npm install -g @aws-amplify/cli
+
+    - name: ===================== [Configure Amplify CLI] =====================
+      run: amplify configure
+
+    # NODE & CODE
     - name: ===================== [Checkout repository code] =====================
       uses: actions/checkout@v3
-#    - name: Checkout code
-#      uses: actions/checkout@v2
 
     - name: ===================== [Check file existence] =====================
       id:   check_files
@@ -48,22 +58,15 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: ===================== [Install Amplify CLI] =====================
+    - name: ===================== [Node.js ${{ matrix.node-version }} build] =====================
+      if: steps.check_files.outputs.files_exists == 'true' 
       run: |
-        sudo apt-get update
-        sudo apt-get install nodejs npm -y
-        sudo npm install -g @aws-amplify/cli
-
-    - name: ===================== [Configure Amplify CLI] =====================
-      run: amplify configure
+        npm i
+        npm run build
 
     - name: ===================== [Build project] =====================
       if: steps.check_files.outputs.files_exists == 'true' 
       run: npm run build --if-present
-
-    - name: ===================== [Clean install] =====================
-      if: steps.check_files.outputs.files_exists == 'true' 
-      run: npm ci
 
 # name: GitHub Secret example
 
