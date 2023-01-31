@@ -10,9 +10,8 @@ jobs:
     permissions:
       id-token: write # need this for OIDC
       contents: read
-    uses: /.github/workflows/aws-megamind-ui.yml
+    #uses: /.github/workflows/aws-megamind-ui.yml
     with:
-      # for multi-repo, set it as "." (current directory); for monorepo, specify the file path for UI, such as "./frontend"
       working-directory: .
       env: ${{ github.event.inputs.environment }}
       build-dir: build
