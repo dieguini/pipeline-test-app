@@ -14,29 +14,52 @@ jobs:
 
     runs-on: ubuntu-latest    
 
+    strategy:
+      matrix:
+        node-version: [10.x]
+        # node-version: [10.x, 12.x, 14.x, 15.x]
+
     steps:
 
-    - name: Configure AWS credentials
+    - name: ===================== [Configure AWS credentials] =====================
       uses: aws-actions/configure-aws-credentials@v1
       with:
-       role-to-assume: arn:aws:iam::077492956248:role/github-actions-role-megamind
-       role-session-name: samplerolesession
+       #role-to-assume: arn:aws:iam::077492956248:role/github-actions-role-megamind
+       role-to-assume: ${{ env.ROLE_GITHUB_ACTIONS }}
+       role-session-name: ROLE_GITHUB_ACTIONS
        aws-region: ${{ env.AWS_REGION }}
         #aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         #aws-region: ${{ env.AWS_REGION }}
 
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: ===================== [Checkout repository code] =====================
+      uses: actions/checkout@v3
+#    - name: Checkout code
+#      uses: actions/checkout@v2
 
-    - name: Install Amplify CLI
+    - name: ===================== [Check file existence] =====================
+      id:   check_files
+      uses: andstor/file-existence-action@v2
+      with:
+        files: "package.json"
+
+    - name: ===================== [Use Node.js ${{ matrix.node-version }}] =====================
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: ===================== [Install Amplify CLI] =====================
       run: |
         sudo apt-get update
         sudo apt-get install nodejs npm -y
         sudo npm install -g @aws-amplify/cli
 
-    - name: Configure Amplify CLI
+    - name: ===================== [Configure Amplify CLI] =====================
       run: amplify configure
+
+    - name: ===================== [Clean install] =====================
+      if: steps.check_files.outputs.files_exists == 'true' 
+      run: npm ci
 
 # name: GitHub Secret example
 
