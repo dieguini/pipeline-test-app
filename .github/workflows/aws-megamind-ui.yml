@@ -6,18 +6,11 @@ env:
   AWS_REGION: us-east-1
 
 jobs:
-  build:
-    permissions:
-      id-token: write # need this for OIDC
-      contents: read
-    #uses: /.github/workflows/aws-megamind-ui.yml
-    with:
-      working-directory: .
-      env: ${{ github.event.inputs.environment }}
-      build-dir: build
-    secrets: inherit
-
   deploy:
+    permissions:
+      id-token: write
+      contents: read
+      
     runs-on: ubuntu-latest
 
     steps:
