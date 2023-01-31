@@ -6,6 +6,18 @@ env:
   AWS_REGION: us-east-1
 
 jobs:
+  build:
+    permissions:
+      id-token: write # need this for OIDC
+      contents: read
+    uses: <path to reusable workflows repo>/.github/workflows/java-maven-build-test.yml@latest
+    with:
+      # for multi-repo, set it as "." (current directory); for monorepo, specify the file path for UI, such as "./frontend"
+      working-directory: .
+      env: ${{ github.event.inputs.environment }}
+      build-dir: build
+    secrets: inherit
+
   deploy:
     runs-on: ubuntu-latest
 
