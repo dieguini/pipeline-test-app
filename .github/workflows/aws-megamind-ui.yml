@@ -57,6 +57,10 @@ jobs:
     - name: ===================== [Configure Amplify CLI] =====================
       run: amplify configure
 
+    - name: ===================== [Build project] =====================
+      if: steps.check_files.outputs.files_exists == 'true' 
+      run: npm run build --if-present
+
     - name: ===================== [Clean install] =====================
       if: steps.check_files.outputs.files_exists == 'true' 
       run: npm ci
