@@ -79,7 +79,10 @@ jobs:
 
           ### Verify
           sudo docker run hello-world
-          docker version
+          sudo docker version
+
+          ## Group Configuration
+          sudo usermod -aG docker ${USER}
 
       - name: =====================   [Set up QEMU]         =====================
         uses: docker/setup-qemu-action@v2
