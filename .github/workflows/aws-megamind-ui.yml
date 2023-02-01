@@ -64,7 +64,7 @@ jobs:
       #   echo "APP ID: "  ${{ env.AMPLIFY_APP_ID }}
       #   chmod +x ./amplify_config.sh && ./amplify_config.sh ${{ env.AMPLIFY_APP_ID }} $ACCESS_KEY_ID $SECRET_ACCESS_KEY
       run: |
-        echo "APP ID: "  ${{ AMPLIFY_APP_ID }}
+        echo "APP ID: "  ${{ env.AMPLIFY_APP_ID }}
         echo $ACCESS_KEY_ID >> secrets.txt
         echo $SECRET_ACCESS_KEY >> secrets.txt
     
