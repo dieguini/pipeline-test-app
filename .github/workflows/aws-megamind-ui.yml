@@ -83,6 +83,7 @@ jobs:
 
           ## Group Configuration
           sudo usermod -aG docker ${USER}
+          newgrp docker
 
       - name: =====================   [Set up QEMU]         =====================
         uses: docker/setup-qemu-action@v2
