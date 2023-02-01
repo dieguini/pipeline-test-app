@@ -12,58 +12,60 @@ permissions:
 
 jobs:
 
-  deploy:
-    runs-on: self-hosted    
-    strategy:
-      matrix:
-        node-version: [12.x]
-        # node-version: [10.x, 12.x, 14.x, 15.x]
-    steps:
-    - name: ===================== [Configure AWS credentials] =====================
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-       role-to-assume: arn:aws:iam::077492956248:role/github-actions-role-megamind
-       role-session-name: ROLE_GITHUB_ACTIONS
-       aws-region: ${{ env.AWS_REGION }}
-        #aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        #aws-region: ${{ env.AWS_REGION }}
-    - name: ===================== [Install Amplify CLI] =====================
-      run: |
-        sudo apt-get update
-        sudo apt-get install nodejs npm -y
-        sudo npm install -g @aws-amplify/cli
-    - name: ===================== [Configure Amplify CLI] =====================
-      run: amplify configure
-    - name: ===================== [Checkout repository code] =====================
-      uses: actions/checkout@v3
-    - name: ===================== [Check file existence] =====================
-      id:   check_files
-      uses: andstor/file-existence-action@v2
-      with:
-        files: "package.json"
-    - name: ===================== [Run Shell Script] =====================
-      env:
-        ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: |
-        echo APP ID: ${{ vars.AMPLIFY_APP_ID }}
-        chmod +x ./amplify_config.sh && ./amplify_config.sh ${{ vars.AMPLIFY_APP_ID }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    - name: ===================== [Build] =====================
-      if: steps.check_files.outputs.files_exists == 'true' 
-      run: npm i
+  # deploy:
+  #   runs-on: self-hosted    
+  #   strategy:
+  #     matrix:
+  #       node-version: [12.x]
+  #       # node-version: [10.x, 12.x, 14.x, 15.x]
+  #   steps:
+  #   - name: =====================   [Configure AWS credentials]  =====================
+  #     uses: aws-actions/configure-aws-credentials@v1
+  #     with:
+  #      role-to-assume: arn:aws:iam::077492956248:role/github-actions-role-megamind
+  #      role-session-name: ROLE_GITHUB_ACTIONS
+  #      aws-region: ${{ env.AWS_REGION }}
+  #       #aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       #aws-region: ${{ env.AWS_REGION }}
+  #   - name: =====================   [Install Amplify CLI]   =====================
+  #     run: |
+  #       sudo apt-get update
+  #       sudo apt-get install nodejs npm -y
+  #       sudo npm install -g @aws-amplify/cli
+  #   - name: =====================   [Configure Amplify CLI] =====================
+  #     run: amplify configure
+  #   - name: =====================   [Checkout Repo Code]    =====================
+  #     uses: actions/checkout@v3
+  #   - name: =====================   [Check file existence]  =====================
+  #     id:   check_files
+  #     uses: andstor/file-existence-action@v2
+  #     with:
+  #       files: "package.json"
+  #   - name: =====================     [Run Shell Script]    =====================
+  #     env:
+  #       ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     run: |
+  #       echo APP ID: ${{ vars.AMPLIFY_APP_ID }}
+  #       chmod +x ./amplify_config.sh && ./amplify_config.sh ${{ vars.AMPLIFY_APP_ID }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #   - name: =====================         [Build]           =====================
+  #     if: steps.check_files.outputs.files_exists == 'true' 
+  #     run: npm i
 
   docker:
     runs-on: self-hosted
-    needs: deploy
+    # needs: deploy
     steps:
       # TODO - Check if docker is install to skip this step
-      - name: ===================== [Set up Dokcer] =====================
+      - name: =====================   [Set up Dokcer]       =====================
         run: |
           ### Docker and docker compose prerequisites
           sudo apt-get install -y curl gnupg ca-certificates lsb-release
           ### Add Docker official GPG key
+          pwd
           sudo mkdir -p /etc/apt/keyrings
+          sudo rm -f /etc/apt/keyrings/docker.gpg
           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
           ### Set up the repository
@@ -79,11 +81,11 @@ jobs:
           sudo docker run hello-world
           docker version
 
-      - name: ===================== [Set up QEMU] =====================
+      - name: =====================   [Set up QEMU]         =====================
         uses: docker/setup-qemu-action@v2
-      - name: ===================== [Set up Docker Buildx] =====================
+      - name: =====================   [Set Docker Buildx]   =====================
         uses: docker/setup-buildx-action@v2
-      - name: ===================== [Login to Docker Hub] =====================
+      - name: =====================   [Login Docker Hub]    =====================
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
