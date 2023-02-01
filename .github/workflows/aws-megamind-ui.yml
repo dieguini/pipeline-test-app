@@ -47,26 +47,35 @@ jobs:
     - name: ===================== [Checkout repository code] =====================
       uses: actions/checkout@v3
 
+    - name: ===================== [Checkout repository code] =====================
+      uses: actions/checkout@v3
+
     - name: ===================== [Check file existence] =====================
       id:   check_files
       uses: andstor/file-existence-action@v2
       with:
         files: "package.json"
 
-    - name: ===================== [Use Node.js ${{ matrix.node-version }}] =====================
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: ===================== [Node.js ${{ matrix.node-version }} build] =====================
-      if: steps.check_files.outputs.files_exists == 'true' 
+    - name: ===================== [Run Shell Script] =====================
       run: |
-        npm i
-        npm run build
+        echo "APP ID: "  ${{ env.AMPLIFY_APP_ID }}
+        chmod +x ./amplify_config && ./amplify_config ${{ env.AMPLIFY_APP_ID }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    - name: ===================== [Build project] =====================
-      if: steps.check_files.outputs.files_exists == 'true' 
-      run: npm run build --if-present
+
+    # - name: ===================== [Use Node.js ${{ matrix.node-version }}] =====================
+    #   uses: actions/setup-node@v3
+    #   with:
+    #     node-version: ${{ matrix.node-version }}
+
+    # - name: ===================== [Node.js ${{ matrix.node-version }} build] =====================
+    #   if: steps.check_files.outputs.files_exists == 'true' 
+    #   run: |
+    #     npm i
+    #     npm run build
+
+    # - name: ===================== [Build project] =====================
+    #   if: steps.check_files.outputs.files_exists == 'true' 
+    #   run: npm run build --if-present
 
 # name: GitHub Secret example
 
