@@ -59,7 +59,7 @@ jobs:
     - name: ===================== [Run Shell Script] =====================
       run: |
         echo "APP ID: "  ${{ env.AMPLIFY_APP_ID }}
-        chmod +x ./amplify_config && ./amplify_config ${{ env.AMPLIFY_APP_ID }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        chmod +x ./amplify_config.sh && ./amplify_config.sh ${{ env.AMPLIFY_APP_ID }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 
     # - name: ===================== [Use Node.js ${{ matrix.node-version }}] =====================
