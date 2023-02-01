@@ -85,6 +85,20 @@ jobs:
           sudo usermod -aG docker ${USER}
           newgrp docker
 
+          ## Docker Start With Boot
+          sudo systemctl enable docker.service
+          sudo systemctl enable containerd.service
+      
+      - name: SUPER TEST! - Log out of shell
+        run: |
+          echo "Logging out of shell..."
+          exec bash -c 'exit'
+
+      - name: SUPER TEST! - Log back in to shell
+        run: |
+          echo "Logging back in to shell..."
+          exec bash
+
       - name: =====================   [Set up QEMU]         =====================
         uses: docker/setup-qemu-action@v2
       - name: =====================   [Set Docker Buildx]   =====================
