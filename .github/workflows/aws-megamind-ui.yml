@@ -54,50 +54,50 @@ jobs:
   #     run: npm i
 
   docker:
-    runs-on: self-hosted
+    runs-on: ubuntu-22.04
     # needs: deploy
     steps:
       # TODO - Check if docker is install to skip this step
-      - name: =====================   [Set up Dokcer]       =====================
-        run: |
-          ### Docker and docker compose prerequisites
-          sudo apt-get install -y curl gnupg ca-certificates lsb-release
-          ### Add Docker official GPG key
-          pwd
-          sudo mkdir -p /etc/apt/keyrings
-          sudo rm -f /etc/apt/keyrings/docker.gpg
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      # - name: =====================   [Set up Dokcer]       =====================
+      #   run: |
+      #     ### Docker and docker compose prerequisites
+      #     sudo apt-get install -y curl gnupg ca-certificates lsb-release
+      #     ### Add Docker official GPG key
+      #     pwd
+      #     sudo mkdir -p /etc/apt/keyrings
+      #     sudo rm -f /etc/apt/keyrings/docker.gpg
+      #     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
-          ### Set up the repository
-          echo \
-          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-          $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      #     ### Set up the repository
+      #     echo \
+      #     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      #     $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-          ### Install docker
-          sudo apt-get update
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+      #     ### Install docker
+      #     sudo apt-get update
+      #     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-          ### Verify
-          sudo docker run hello-world
-          sudo docker version
+      #     ### Verify
+      #     sudo docker run hello-world
+      #     sudo docker version
 
-          ## Group Configuration
-          sudo usermod -aG docker ${USER}
-          newgrp docker
+      #     ## Group Configuration
+      #     sudo usermod -aG docker ${USER}
+      #     newgrp docker
 
-          ## Docker Start With Boot
-          sudo systemctl enable docker.service
-          sudo systemctl enable containerd.service
+      #     ## Docker Start With Boot
+      #     sudo systemctl enable docker.service
+      #     sudo systemctl enable containerd.service
       
-      - name: SUPER TEST! - Log out of shell
-        run: |
-          echo "Logging out of shell..."
-          exec bash -c 'exit'
+      # - name: SUPER TEST! - Log out of shell
+      #   run: |
+      #     echo "Logging out of shell..."
+      #     exec bash -c 'exit'
 
-      - name: SUPER TEST! - Log back in to shell
-        run: |
-          echo "Logging back in to shell..."
-          exec bash
+      # - name: SUPER TEST! - Log back in to shell
+      #   run: |
+      #     echo "Logging back in to shell..."
+      #     exec bash
 
       - name: =====================   [Set up QEMU]         =====================
         uses: docker/setup-qemu-action@v2
