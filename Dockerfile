@@ -1,30 +1,16 @@
 # Build stage
-FROM node:latest AS build
+FROM node:16-alpine AS build
 
-RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
-WORKDIR /usr/src/app
-COPY package*.json /usr/src/app/
+WORKDIR /app
+COPY . .
 RUN npm install -g @aws-amplify/cli && \
     npm i --only=production
-
-# FROM node:14-bullseye-slim
-# RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
-# ENV NODE_ENV production
-# WORKDIR /usr/src/app
-# COPY package*.json /usr/src/app/
-# COPY --chown=node:node . /usr/src/app
-# COPY . /usr/src/app
-# RUN npm ci --only=production
-# RUN npm install -g @aws-amplify/cli
-# USER node
-# #RUN npm i
-# RUN npm run build
+RUN ["npm", "run", "build"]
 
 # Production stage
-FROM node:14-bullseye-slim
-COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
-USER node
-WORKDIR /usr/src/app
-COPY --chown=node:node --from=build /usr/src/app/node_modules /usr/src/app/node_modules
-COPY --chown=node:node . /usr/src/app
-CMD ["dumb-init", "node", "server.js"]
+FROM nginx:1.23.3-alpine-slim
+ENV NODE_ENV production
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
