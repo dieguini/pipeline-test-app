@@ -5,3 +5,6 @@ Dockerfile
 .git
 .gitignore
 .npmrc
+# Amplify Configuration
+/amplify
+aws-exports.js
