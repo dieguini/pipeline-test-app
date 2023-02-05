@@ -52,23 +52,8 @@ jobs:
 
   docker:
     runs-on: self-hosted
-    # needs: deploy
+    needs: deploy
     steps:
-      - name: =====================   [Configure AWS credentials]  =====================
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ vars.AWS_ROLE_GITHUB_ACTIONS }}
-          role-session-name: ROLE_GITHUB_ACTIONS
-          aws-region: ${{ env.AWS_REGION }}
-      - name: =====================   [Configure Amplify CLI] =====================
-        run: amplify configure
-      - name: =====================     [Run Shell Script]    =====================
-        env:
-          ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          echo APP ID: ${{ vars.AMPLIFY_APP_ID }}
-          chmod +x ./amplify_config.sh && ./amplify_config.sh ${{ vars.AMPLIFY_APP_ID }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: =====================   [Set up QEMU]         =====================
         uses: docker/setup-qemu-action@v2
       - name: =====================   [Set Docker Buildx]   =====================
@@ -79,7 +64,7 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: =====================   [Build and push]    =====================
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dev-megamind:latest
