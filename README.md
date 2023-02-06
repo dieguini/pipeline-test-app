@@ -3,15 +3,50 @@
 
 
 ## Requirements
+---
 You must have installed and configured `aws-cli` using `aws configure` command, besides you must need to have installed Amplify CLI globally, you can achieve it by using the following command `npm install -g @aws-amplify/cli`
 
 ## Usage
+---
+### Amplify
 
-After unpack the project, in the folder of the project use
+There are two ways of retriving the configuration needed of amplify:
 
-### `amplify pull`
+- **Automatic** _(Recommended)_: Via script ([amplify_config.sh](amplify_config.sh)) explain in [Automatic] section above
+- **Manual**: Via command and giving parameters explain in [Manual] section above
 
-	It will ask you for some parameters:
+Both ways will generate the configuration needed wich is:
+
+- `amplify` folder root project level
+- `aws-exports.js` inside `src/` folder
+
+#### Automatic
+
+The [amplify_config.sh](amplify_config.sh) will retrive all the backend configuration.
+
+To use this way you **MUST** gave the next parameters
+
+```sh
+$ amplify_config.sh -a APP_ID -e ENV -k AWS_ACCESS_KEY_ID -s AWS_SECRET_ACCESS_KEY
+```
+
+- **APP_ID**: Current app_id is `dcaoe62rxz4br`
+- **ENV**: Current environment is `dev`
+
+##### Parameters explanation
+
+- **`-a` (APP_ID)**: Application Id provide by amplify
+- **`**-e**` (ENV)**: Environment of amplify
+- **`**-k**` (AWS_ACCESS_KEY_ID)**: Aws Access Key
+- **`-s` (AWS_SECRET_ACCESS_KEY)**: Aws Secret Key
+
+**NOTE**: Remember to have this file with execute permissions `chmod +x amplify_config.sh`
+
+#### Manual
+
+After unpack the project, in the folder of the project use `amplify pull` command.
+
+It will ask you for next parameters:
 	
 	- AWS profile: default
 	- Which app are you working on?: select the suggested value ( `LDO03UIbase` )
@@ -26,8 +61,6 @@ After unpack the project, in the folder of the project use
 ### `npm install`
 
 This install all the packages and resources necessary to run the app
-
-
 
 For start the app use
 

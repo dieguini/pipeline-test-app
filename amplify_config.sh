@@ -1,10 +1,18 @@
-#!/bin/bash
-# VARIABLES
-APP_ID=$1
-ACCESS_KEY_ID=$2
-SECRET_ACCESS_KEY=$3
-
-# SCRIPT
+#!/bin/sh
+# Variables
+while getopts a:k:s:e: flag
+do
+    case "${flag}" in
+        a) APP_ID=${OPTARG};;
+        k) ACCESS_KEY_ID=${OPTARG};;
+        s) SECRET_ACCESS_KEY=${OPTARG};;
+        e) ENV=${OPTARG};;
+        \?) # Invalid option
+         echo "Error: Invalid option"
+         exit;;
+    esac
+done
+# Script
 set -e
 IFS='|'
 
@@ -25,7 +33,7 @@ AWSCLOUDFORMATIONCONFIG="{\
 AMPLIFY="{\
         \"projectName\":\"headlessProjectName\",\
         \"appId\":\"$APP_ID\",\
-        \"envName\":\"dev\",\
+        \"envName\":\"$ENV\",\
         \"defaultEditor\":\"code\"\
 }"
 FRONTEND="{\
@@ -40,3 +48,5 @@ amplify pull \
   --frontend $FRONTEND \
   --providers $PROVIDERS \
   --yes
+
+echo "Command executed succefully!"

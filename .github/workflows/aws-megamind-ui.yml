@@ -41,7 +41,7 @@ jobs:
         files: "package.json"
     - name: =====================     [Run Shell Script]    =====================
       run: |
-        chmod +x ./amplify_config.sh && ./amplify_config.sh ${{ vars.AMPLIFY_APP_ID }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        chmod +x amplify_config.sh && sh amplify_config.sh -a ${{ vars.AMPLIFY_APP_ID }} -e dev -k ${{ secrets.AWS_ACCESS_KEY_ID }} -s ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     - name: =====================         [Build]           =====================
       if: steps.check_files.outputs.files_exists == 'true' 
       run: npm i
@@ -61,13 +61,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
       - name: =====================   [Build and push]    =====================
         uses: docker/build-push-action@v4
         with:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dev-megamind:latest
           build-args: |
-            APP_ID=${{vars.AMPLIFY_APP_ID}}
-            AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}}
-            AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}}
-            ENV=dev      
+            APP_ID=${{ vars.AMPLIFY_APP_ID }}
+            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            ENV=dev   
