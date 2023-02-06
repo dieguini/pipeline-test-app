@@ -12,43 +12,43 @@ permissions:
 
 jobs:
 
-  # deploy:
-  #   runs-on: self-hosted    
-  #   strategy:
-  #     matrix:
-  #       node-version: [16.x]
-  #       # node-version: [16.x, 17.x, 18.x, 19.x]
-  #   steps:
-  #   - name: =====================   [Configure AWS credentials]  =====================
-  #     uses: aws-actions/configure-aws-credentials@v1
-  #     with:
-  #      role-to-assume: ${{ vars.AWS_ROLE_GITHUB_ACTIONS }}
-  #      role-session-name: ROLE_GITHUB_ACTIONS
-  #      aws-region: ${{ env.AWS_REGION }}
-  #   - name: =====================   [Install Amplify CLI]   =====================
-  #     run: |
-  #       sudo apt-get update
-  #       sudo apt-get install nodejs npm -y
-  #       sudo npm install -g @aws-amplify/cli
-  #   - name: =====================   [Configure Amplify CLI] =====================
-  #     run: amplify configure
-  #   - name: =====================   [Checkout Repo Code]    =====================
-  #     uses: actions/checkout@v3
-  #   - name: =====================   [Check file existence]  =====================
-  #     id:   check_files
-  #     uses: andstor/file-existence-action@v2
-  #     with:
-  #       files: "package.json"
-  #   - name: =====================     [Run Shell Script]    =====================
-  #     run: |
-  #       chmod +x ./amplify_config.sh && ./amplify_config.sh ${{ vars.AMPLIFY_APP_ID }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #   - name: =====================         [Build]           =====================
-  #     if: steps.check_files.outputs.files_exists == 'true' 
-  #     run: npm i
+  deploy:
+    runs-on: ubuntu-22.04 
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # node-version: [16.x, 17.x, 18.x, 19.x]
+    steps:
+    - name: =====================   [Configure AWS credentials]  =====================
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+       role-to-assume: ${{ vars.AWS_ROLE_GITHUB_ACTIONS }}
+       role-session-name: ROLE_GITHUB_ACTIONS
+       aws-region: ${{ env.AWS_REGION }}
+    - name: =====================   [Install Amplify CLI]   =====================
+      run: |
+        sudo apt-get update
+        sudo apt-get install nodejs npm -y
+        sudo npm install -g @aws-amplify/cli
+    - name: =====================   [Configure Amplify CLI] =====================
+      run: amplify configure
+    - name: =====================   [Checkout Repo Code]    =====================
+      uses: actions/checkout@v3
+    - name: =====================   [Check file existence]  =====================
+      id:   check_files
+      uses: andstor/file-existence-action@v2
+      with:
+        files: "package.json"
+    - name: =====================     [Run Shell Script]    =====================
+      run: |
+        chmod +x ./amplify_config.sh && ./amplify_config.sh ${{ vars.AMPLIFY_APP_ID }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - name: =====================         [Build]           =====================
+      if: steps.check_files.outputs.files_exists == 'true' 
+      run: npm i
 
   docker:
-    runs-on: self-hosted
-    # needs: deploy
+    runs-on: ubuntu-22.04
+    needs: deploy
     steps:
       # - name: =====================   [Set up QEMU]         =====================
         # uses: docker/setup-qemu-action@v2
@@ -67,9 +67,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dev-megamind:latest
           build-args: |
-            APP_ID=${{ vars.AMPLIFY_APP_ID }}
-            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            ENV=dev
-
-      
+            APP_ID=${{vars.AMPLIFY_APP_ID}}
+            AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}}
+            AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}}
+            ENV=dev      
