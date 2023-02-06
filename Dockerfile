@@ -12,6 +12,7 @@ RUN npm install -g @aws-amplify/cli
 RUN rm -rf amplify && rm -rf src/aws-exports.js && \
 chmod +x amplify_config.sh && \
 sh amplify_config.sh -a ${APP_ID} -e ${ENV} -k ${AWS_ACCESS_KEY_ID} -s ${AWS_SECRET_ACCESS_KEY}
+## NPM
 RUN npm i --only=production
 RUN ["npm", "run", "build"]
 
