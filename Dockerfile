@@ -1,5 +1,5 @@
 # Build stage
-FROM node:16.19.0-bullseye AS build
+FROM node:16.19-bullseye-slim AS build
 
 WORKDIR /app
 COPY . .
