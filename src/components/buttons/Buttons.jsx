@@ -1,6 +1,8 @@
 import { MDBBtn } from 'mdb-react-ui-kit';
 import styled, { css } from 'styled-components';
 
+import React, { useState } from "react";
+import { MDBDropdown,MDBDropdownToggle,MDBDropdownMenu,MDBDropdownItem } from 'mdb-react-ui-kit';
 
 
 const text = css`
@@ -58,13 +60,21 @@ const disabled = css`
     background: #b5c1ff;
 
 `
+
+const request = css`
+    flex: 1;
+    &:hover {
+        color: #3b71ca;
+    }
+`
  
 
 const buttonVariants = {
     text,
     outline,
     disabled,
-    special
+    special,
+    request
 }
 
 
@@ -76,12 +86,12 @@ const getVariant = (props) => {
 
 
 export const SimpleButton = styled(MDBBtn)`
-
     background: linear-gradient(60deg, var(--main-color-light), var(--main-color-neutral));
-    transition: 500ms;
+    transition: 250ms;
     box-shadow: none;
     border: 1px solid;
-
+    width: 100%;
+    
     &:hover {
         background: none;
         box-shadow: none;
@@ -93,10 +103,40 @@ export const SimpleButton = styled(MDBBtn)`
         background: linear-gradient(60deg, var(--main-color-light), var(--main-color-neutral));
         opacity: 0.3;
     }
-
+    
     ${ props => getVariant(props) }
-
-    width: 100%;
+    
     font-weight: bold;
+`;
 
-`
+export const Dropdown = ({ selectedOption, setSelectedOption }) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleOptionSelect = (option) => {
+        setSelectedOption(option);
+        setIsOpen(false);
+    }
+
+    const style = {
+        background: 'linear-gradient(60deg, var(--main-color-light), var(--main-color-neutral))',
+        transition: '500ms',
+        boxShadow: 'none',
+        border: '1px solid',
+        width: '100%',
+    }
+
+    return (
+        <MDBDropdown isopen={isOpen.toString()}>
+            <MDBDropdownToggle style={style} onClick={() => setIsOpen(!isOpen)}>
+            {selectedOption}
+            </MDBDropdownToggle>
+            <MDBDropdownMenu style={style}>
+            {selectedOption === "Frequent Requests" ? 
+                <MDBDropdownItem className="text-center text-white" onClick={() => handleOptionSelect('History Requests')}>HISTORY REQUESTS</MDBDropdownItem>
+                :
+                <MDBDropdownItem className="text-center text-white" onClick={() => handleOptionSelect('Frequent Requests')}>FREQUENT REQUESTS</MDBDropdownItem>
+            }
+            </MDBDropdownMenu>
+        </MDBDropdown>
+        );
+  }

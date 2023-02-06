@@ -34,7 +34,7 @@ const fileUploadConfig = {
     },
     Storage: {
       AWSS3:{
-        bucket: "s3-megamind-csv",
+        bucket: "bucket-megamind-v1",
         region: "us-east-1"
       }
     }

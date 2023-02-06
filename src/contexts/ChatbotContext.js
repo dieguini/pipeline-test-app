@@ -16,7 +16,12 @@ export const ChatbotProvider = ({children}) => {
         {
             author: "bot",
             contentType: "PlainText",
-            message: "Welcome, how can I help you?"
+            message: "Welcome! We are excited to help you."
+        },
+        {
+            author: "bot",
+            contentType: "PlainText",
+            message: "Would you like to get information about bootcamps, applicants or maybe get some reports?"
         }
     ])
 
