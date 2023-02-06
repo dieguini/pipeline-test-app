@@ -56,6 +56,8 @@ jobs:
     steps:
       # - name: =====================   [Set up QEMU]         =====================
         # uses: docker/setup-qemu-action@v2
+      - name: =====================   [Checkout Repo Code]    ===================== # DELETE
+        uses: actions/checkout@v3 # DELETE
       - name: =====================   [Set Docker Buildx]   =====================
         uses: docker/setup-buildx-action@v2
       - name: =====================   [Login Docker Hub]    =====================
@@ -73,8 +75,8 @@ jobs:
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dev-megamind:latest
           build-args: |
             APP_ID=${{ vars.AMPLIFY_APP_ID }}
-            AWS_ACCESS_KEY_ID=${ACCESS_KEY_ID}
-            AWS_SECRET_ACCESS_KEY=${SECRET_ACCESS_KEY}
+            AWS_ACCESS_KEY_ID=${{ env.ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY=${{ env.SECRET_ACCESS_KEY }}
             ENV=dev
 
       
